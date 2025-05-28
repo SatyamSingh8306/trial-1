@@ -1,0 +1,27 @@
+name: Auto Commit Every 30 Minutes
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Make a commit
+        run: |
+          echo "Update time: $(date)" >> log.txt
+          git config user.name "Satyam Singh"
+          git config user.email "satya@example.com"
+          git add log.txt
+          git commit -m "Auto commit at $(date)"
+          git push
