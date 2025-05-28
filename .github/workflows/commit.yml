@@ -7,11 +7,19 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Information
+        run: |
+          echo "Workflow started at: $(date)"
+          echo "Repository: ${{ github.repository }}"
+          echo "Event name: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
@@ -21,7 +29,7 @@ jobs:
         run: |
           echo "Update time: $(date)" >> log.txt
           git config user.name "Satyam Singh"
-          git config user.email "satya@example.com"
+          git config user.email "aicinema69@gmail.com"
           git add log.txt
           git commit -m "Auto commit at $(date)"
           git push
