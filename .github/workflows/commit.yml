@@ -28,7 +28,7 @@ jobs:
       - name: Make a commit
         run: |
           echo "Update time: $(date)" >> log.txt
-          git config user.name "Satyam Singh"
+          git config user.name "SatyamSingh8306"
           git config user.email "aicinema69@gmail.com"
           git add log.txt
           git commit -m "Auto commit at $(date)"
