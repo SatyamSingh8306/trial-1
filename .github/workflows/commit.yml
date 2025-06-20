@@ -12,6 +12,7 @@ permissions:
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
+
     steps:
       - name: Debug Information
         run: |
@@ -25,11 +26,15 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Make a commit
+      - name: Modify Python file
         run: |
-          echo "Update time: $(date)" >> log.txt
+          FILE="main.py"
+          echo "# Auto update at $(date)" >> $FILE
+
+      - name: Commit and Push changes
+        run: |
           git config user.name "SatyamSingh8306"
           git config user.email "aicinema69@gmail.com"
-          git add log.txt
-          git commit -m "Auto commit at $(date)"
+          git add main.py
+          git commit -m "Auto update in main.py at $(date)" || echo "No changes to commit"
           git push
