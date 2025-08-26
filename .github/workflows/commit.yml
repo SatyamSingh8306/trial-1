@@ -24,7 +24,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}   # ✅ Use built-in token
 
       - name: Modify Python file
         run: |
@@ -33,8 +33,8 @@ jobs:
 
       - name: Commit and Push changes
         run: |
-          git config user.name "SatyamSingh8306"
-          git config user.email "aicinema69@gmail.com"
+          git config user.name "github-actions[bot]"   # ✅ Bot identity
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add main.py
           git commit -m "Auto update in main.py at $(date)" || echo "No changes to commit"
-          git push
+          git push origin HEAD:main
