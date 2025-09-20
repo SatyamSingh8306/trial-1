@@ -3,7 +3,7 @@ name: Auto Commit Every 30 Minutes
 on:
   schedule:
     - cron: '*/30 * * * *'  # Every 30 minutes
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -25,18 +25,19 @@ jobs:
           echo "# Auto update at $(date)" >> $FILE
 
       - name: Create Pull Request
+        id: cpr   # 👈 store outputs
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: auto-update
           commit-message: "Auto update main.py at $(date)"
           title: "Auto update main.py"
-          body: |
-            This PR contains automated changes made by GitHub Actions.
+          body: "This PR contains automated changes made by GitHub Actions."
           delete-branch: true
           base: main
 
-      - name: Auto Merge PR
+      - name: Enable Auto-Merge
+        if: steps.cpr.outputs.pull-request-number != ''
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
