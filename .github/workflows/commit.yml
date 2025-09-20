@@ -14,27 +14,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug Information
-        run: |
-          echo "Workflow started at: $(date)"
-          echo "Repository: ${{ github.repository }}"
-          echo "Event name: ${{ github.event_name }}"
-          echo "Actor: ${{ github.actor }}"
-
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}   # ✅ Use built-in token
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Modify Python file
         run: |
           FILE="main.py"
           echo "# Auto update at $(date)" >> $FILE
 
-      - name: Commit and Push changes
-        run: |
-          git config user.name "github-actions[bot]"   # ✅ Bot identity
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add main.py
-          git commit -m "Auto update in main.py at $(date)" || echo "No changes to commit"
-          git push origin HEAD:main
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto-update
+          commit-message: "Auto update main.py at $(date)"
+          title: "Auto update main.py"
+          body: |
+            This PR contains automated changes made by GitHub Actions.
+          delete-branch: true
+          base: main
+
+      - name: Auto Merge PR
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
