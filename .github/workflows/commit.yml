@@ -1,8 +1,10 @@
 name: Auto Commit Every 30 Minutes
 
+name: Auto Commit Every 30 Minutes
+
 on:
   schedule:
-    - cron: '0 9-15 * * *'
+    - cron: '0 */7 * * *'   # Every 7 hours
   workflow_dispatch:
 
 permissions:
